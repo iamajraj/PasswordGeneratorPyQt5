@@ -1,7 +1,7 @@
 import sys
 import random
 import string
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QVBoxLayout, QWidget, QPushButton, QHBoxLayout, QSpinBox, QCheckBox
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QVBoxLayout, QWidget, QPushButton, QHBoxLayout, QSpinBox, QCheckBox, QMessageBox
 from PyQt5.QtCore import Qt
 
 class PasswordGeneratorApp(QMainWindow):
@@ -71,6 +71,7 @@ class PasswordGeneratorApp(QMainWindow):
         # Copy button
         copy_button = QPushButton('Copy Password')
         copy_button.setStyleSheet("background-color: #008CBA; color: white; padding: 10px 20px; border: none; border-radius: 5px;")
+        copy_button.clicked.connect(self.copy_password)
         layout.addWidget(copy_button)
         
         # Result display label
@@ -103,6 +104,14 @@ class PasswordGeneratorApp(QMainWindow):
         else:
             self.result_label.setText("Please select at least one character type.")
             self.copied_password = None
+    
+    def copy_password(self):
+        if hasattr(self, 'copied_password') and self.copied_password:
+            clipboard = QApplication.clipboard()
+            clipboard.setText(self.copied_password)
+            QMessageBox.information(self, 'Password Copied', 'Password copied to clipboard!')
+        else:
+            QMessageBox.warning(self, 'No Password Generated', 'Generate a password first!')
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
